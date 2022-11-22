@@ -80,9 +80,9 @@ def main():
     start_comics_number = 1
     end_comics_number = 2700
 
-    comics_info = get_comics(random.randint(start_comics_number, end_comics_number))
-    comics_funny_comment = comics_info['alt']
-    fetch_comics(comics_info['img'], comics_file)
+    random_comics = get_comics(random.randint(start_comics_number, end_comics_number))
+    comics_funny_comment = random_comics['alt']
+    fetch_comics(random_comics['img'], comics_file)
 
     server_for_upload_photo = get_wall_upload_server(vk_token, vk_group_id)['response']['upload_url']
     uploaded_image_params = upload_image_to_vk('image.jpg', server_for_upload_photo)
