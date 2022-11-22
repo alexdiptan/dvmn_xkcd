@@ -77,8 +77,10 @@ def main():
     vk_token = os.environ['VK_ACCESS_TOKEN']
     vk_group_id = os.environ['VK_GROUP_ID']
     comics_file = 'image.jpg'
+    start_comics_number = 1
+    end_comics_number = 2700
 
-    comics_info = get_comics(random.randint(1, 2700))
+    comics_info = get_comics(random.randint(start_comics_number, end_comics_number))
     comics_funny_comment = comics_info['alt']
     fetch_comics(comics_info['img'], comics_file)
 
