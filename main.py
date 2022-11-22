@@ -6,10 +6,10 @@ import requests
 from dotenv import load_dotenv
 
 
-def fetch_comics(img_url, image_file) -> None:
+def fetch_comics(img_url, image_filepath) -> None:
     response = requests.get(img_url)
     response.raise_for_status()
-    with open(image_file, 'wb') as file:
+    with open(image_filepath, 'wb') as file:
         file.write(response.content)
 
 
@@ -85,14 +85,14 @@ def main():
     load_dotenv()
     vk_token = os.environ['VK_ACCESS_TOKEN']
     vk_group_id = os.environ['VK_GROUP_ID']
-    comics_file = 'image.jpg'
+    comics_filename = 'image.jpg'
     start_comics_number = 1
     end_comics_number = 2700
 
     try:
         random_comics = get_comics(random.randint(start_comics_number, end_comics_number))
         comics_funny_comment = random_comics['alt']
-        fetch_comics(random_comics['img'], comics_file)
+        fetch_comics(random_comics['img'], comics_filename)
 
         server_for_upload_photo = get_wall_upload_server(vk_token, vk_group_id)['response']['upload_url']
         uploaded_image_params = upload_image_to_vk('image.jpg', server_for_upload_photo)
@@ -103,7 +103,7 @@ def main():
         publish_photo_on_the_wall(saved_photo_params['media_id'], saved_photo_params['owner_id'], vk_group_id,
                                   comics_funny_comment, vk_token)
     finally:
-        file_to_remove = pathlib.Path(comics_file)
+        file_to_remove = pathlib.Path(comics_filename)
         file_to_remove.unlink()
 
 
