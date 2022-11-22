@@ -87,11 +87,11 @@ def main():
 
         server_for_upload_photo = get_wall_upload_server(vk_token, vk_group_id)['response']['upload_url']
         uploaded_image_params = upload_image_to_vk('image.jpg', server_for_upload_photo)
-        uploaded_image_params_server = uploaded_image_params['server']
-        uploaded_image_params_photo = uploaded_image_params['photo']
-        uploaded_image_params_hash = uploaded_image_params['hash']
-        saved_photo_params = save_wall_photo(vk_group_id, uploaded_image_params_photo, uploaded_image_params_server,
-                                             uploaded_image_params_hash, vk_token)
+        uploaded_image_server = uploaded_image_params['server']
+        uploaded_image_photo = uploaded_image_params['photo']
+        uploaded_image_hash = uploaded_image_params['hash']
+        saved_photo_params = save_wall_photo(vk_group_id, uploaded_image_photo, uploaded_image_server,
+                                             uploaded_image_hash, vk_token)
         saved_photo_owner_id = saved_photo_params['response'][0]['owner_id']
         saved_photo_media_id = saved_photo_params['response'][0]['id']
 
