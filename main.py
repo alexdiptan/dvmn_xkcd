@@ -37,9 +37,9 @@ def upload_image_to_vk(image, upload_url):
     with open(image, 'rb') as file:
         file_to_upload = {'photo': file}
         response = requests.post(upload_url, files=file_to_upload)
-        response.raise_for_status()
+    response.raise_for_status()
 
-        return response.json()
+    return response.json()
 
 
 def save_wall_photo(group_id, photo, server, photo_hash, vk_token):
