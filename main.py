@@ -6,11 +6,6 @@ import requests
 from dotenv import load_dotenv
 
 
-def remove_published_comics(comics_file):
-    file_to_remove = pathlib.Path(comics_file)
-    file_to_remove.unlink()
-
-
 def fetch_comics(img_url, image_file) -> None:
     response = requests.get(img_url)
     response.raise_for_status()
@@ -99,7 +94,8 @@ def main():
 
     publish_photo_on_the_wall(saved_photo_media_id, saved_photo_owner_id, vk_group_id, comics_funny_comment, vk_token)
 
-    remove_published_comics(comics_file)
+    file_to_remove = pathlib.Path(comics_file)
+    file_to_remove.unlink()
 
 
 if __name__ == '__main__':
