@@ -18,10 +18,6 @@ def fetch_comics(img_url, image_file) -> None:
         file.write(response.content)
 
 
-def get_random_number(start_number, end_number):
-    return random.randint(start_number, end_number)
-
-
 def get_comics(comics_id):
     comics_url = f'https://xkcd.com/{comics_id}/info.0.json'
     response = requests.get(comics_url)
@@ -87,7 +83,7 @@ def main():
     vk_group_id = os.environ['VK_GROUP_ID']
     comics_file = 'image.jpg'
 
-    comics_info = get_comics(get_random_number(1, 2700))
+    comics_info = get_comics(random.randint(1, 2700))
     comics_funny_comment = comics_info['alt']
     fetch_comics(comics_info['img'], comics_file)
 
