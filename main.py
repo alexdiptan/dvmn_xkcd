@@ -80,24 +80,25 @@ def main():
     start_comics_number = 1
     end_comics_number = 2700
 
-    random_comics = get_comics(random.randint(start_comics_number, end_comics_number))
-    comics_funny_comment = random_comics['alt']
-    fetch_comics(random_comics['img'], comics_file)
+    try:
+        random_comics = get_comics(random.randint(start_comics_number, end_comics_number))
+        comics_funny_comment = random_comics['alt']
+        fetch_comics(random_comics['img'], comics_file)
 
-    server_for_upload_photo = get_wall_upload_server(vk_token, vk_group_id)['response']['upload_url']
-    uploaded_image_params = upload_image_to_vk('image.jpg', server_for_upload_photo)
-    uploaded_image_params_server = uploaded_image_params['server']
-    uploaded_image_params_photo = uploaded_image_params['photo']
-    uploaded_image_params_hash = uploaded_image_params['hash']
-    saved_photo_params = save_wall_photo(vk_group_id, uploaded_image_params_photo, uploaded_image_params_server,
-                                         uploaded_image_params_hash, vk_token)
-    saved_photo_owner_id = saved_photo_params['response'][0]['owner_id']
-    saved_photo_media_id = saved_photo_params['response'][0]['id']
+        server_for_upload_photo = get_wall_upload_server(vk_token, vk_group_id)['response']['upload_url']
+        uploaded_image_params = upload_image_to_vk('image.jpg', server_for_upload_photo)
+        uploaded_image_params_server = uploaded_image_params['server']
+        uploaded_image_params_photo = uploaded_image_params['photo']
+        uploaded_image_params_hash = uploaded_image_params['hash']
+        saved_photo_params = save_wall_photo(vk_group_id, uploaded_image_params_photo, uploaded_image_params_server,
+                                             uploaded_image_params_hash, vk_token)
+        saved_photo_owner_id = saved_photo_params['response'][0]['owner_id']
+        saved_photo_media_id = saved_photo_params['response'][0]['id']
 
-    publish_photo_on_the_wall(saved_photo_media_id, saved_photo_owner_id, vk_group_id, comics_funny_comment, vk_token)
-
-    file_to_remove = pathlib.Path(comics_file)
-    file_to_remove.unlink()
+        publish_photo_on_the_wall(saved_photo_media_id, saved_photo_owner_id, vk_group_id, comics_funny_comment, vk_token)
+    finally:
+        file_to_remove = pathlib.Path(comics_file)
+        file_to_remove.unlink()
 
 
 if __name__ == '__main__':
