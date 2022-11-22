@@ -33,16 +33,21 @@ def get_wall_upload_server(vk_token, group_id):
     return response.json()
 
 
-def upload_image_to_vk(image, upload_url):
+def upload_image_to_vk(image, upload_url) -> dict:
     with open(image, 'rb') as file:
         file_to_upload = {'photo': file}
         response = requests.post(upload_url, files=file_to_upload)
     response.raise_for_status()
 
-    return response.json()
+    uploaded_image = {'server': response.json()['server'],
+                      'photo': response.json()['photo'],
+                      'hash': response.json()['hash'],
+                      }
+
+    return uploaded_image
 
 
-def save_wall_photo(group_id, photo, server, photo_hash, vk_token):
+def save_wall_photo(group_id, photo, server, photo_hash, vk_token) -> dict:
     url = 'https://api.vk.com/method/photos.saveWallPhoto'
     params = {'group_id': group_id,
               'photo': photo,
@@ -54,7 +59,11 @@ def save_wall_photo(group_id, photo, server, photo_hash, vk_token):
     response = requests.post(url, params=params)
     response.raise_for_status()
 
-    return response.json()
+    wall_photo = {'owner_id': response.json()['response'][0]['owner_id'],
+                  'media_id': response.json()['response'][0]['id']
+                  }
+
+    return wall_photo
 
 
 def publish_photo_on_the_wall(media_id, owner_id, vk_group_id, message, vk_token):
@@ -87,15 +96,12 @@ def main():
 
         server_for_upload_photo = get_wall_upload_server(vk_token, vk_group_id)['response']['upload_url']
         uploaded_image_params = upload_image_to_vk('image.jpg', server_for_upload_photo)
-        uploaded_image_server = uploaded_image_params['server']
-        uploaded_image_photo = uploaded_image_params['photo']
-        uploaded_image_hash = uploaded_image_params['hash']
-        saved_photo_params = save_wall_photo(vk_group_id, uploaded_image_photo, uploaded_image_server,
-                                             uploaded_image_hash, vk_token)
-        saved_photo_owner_id = saved_photo_params['response'][0]['owner_id']
-        saved_photo_media_id = saved_photo_params['response'][0]['id']
+        saved_photo_params = save_wall_photo(vk_group_id, uploaded_image_params['photo'],
+                                             uploaded_image_params['server'],
+                                             uploaded_image_params['hash'], vk_token)
 
-        publish_photo_on_the_wall(saved_photo_media_id, saved_photo_owner_id, vk_group_id, comics_funny_comment, vk_token)
+        publish_photo_on_the_wall(saved_photo_params['media_id'], saved_photo_params['owner_id'], vk_group_id,
+                                  comics_funny_comment, vk_token)
     finally:
         file_to_remove = pathlib.Path(comics_file)
         file_to_remove.unlink()
