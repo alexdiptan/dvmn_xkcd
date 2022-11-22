@@ -71,6 +71,7 @@ def publish_photo_on_the_wall(media_id, owner_id, vk_group_id, message, vk_token
     vk_attachments = f'photo{owner_id}_{media_id}'
     params = {'owner_id': f'-{vk_group_id}',
               'message': message,
+              'from_group': '1',
               'attachments': vk_attachments,
               'access_token': vk_token,
               'v': '5.131',
