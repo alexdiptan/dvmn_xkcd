@@ -39,9 +39,11 @@ def upload_image_to_vk(image, upload_url) -> dict:
         response = requests.post(upload_url, files=file_to_upload)
     response.raise_for_status()
 
-    uploaded_image = {'server': response.json()['server'],
-                      'photo': response.json()['photo'],
-                      'hash': response.json()['hash'],
+    vk_response = response.json()
+
+    uploaded_image = {'server': vk_response['server'],
+                      'photo': vk_response['photo'],
+                      'hash': vk_response['hash'],
                       }
 
     return uploaded_image
@@ -59,8 +61,10 @@ def save_wall_photo(group_id, photo, server, photo_hash, vk_token) -> dict:
     response = requests.post(url, params=params)
     response.raise_for_status()
 
-    wall_photo = {'owner_id': response.json()['response'][0]['owner_id'],
-                  'media_id': response.json()['response'][0]['id']
+    vk_response = response.json()
+
+    wall_photo = {'owner_id': vk_response['response'][0]['owner_id'],
+                  'media_id': vk_response['response'][0]['id']
                   }
 
     return wall_photo
