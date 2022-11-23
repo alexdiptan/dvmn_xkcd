@@ -91,9 +91,9 @@ def main():
         fetch_comics(random_comics['img'], comics_filename)
 
         server_for_upload_photo = get_wall_upload_server(vk_token, vk_group_id)['response']['upload_url']
-        image_server, image_photo, image_hash = upload_image_to_vk('image.jpg', server_for_upload_photo)
+        server, photo, photo_hash = upload_image_to_vk('image.jpg', server_for_upload_photo)
 
-        owner_id, media_id = save_wall_photo(vk_group_id, image_photo, image_server, image_hash, vk_token)
+        owner_id, media_id = save_wall_photo(vk_group_id, photo, server, photo_hash, vk_token)
         publish_photo_on_the_wall(media_id, owner_id, vk_group_id, comics_funny_comment, vk_token)
     finally:
         file_to_remove = pathlib.Path(comics_filename)
