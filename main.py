@@ -18,7 +18,9 @@ def get_comics(comics_id):
     response = requests.get(comics_url)
     response.raise_for_status()
 
-    return response.json()
+    comics = response.json()
+
+    return comics['img'], comics['alt']
 
 
 def get_wall_upload_server(vk_token, group_id):
@@ -86,9 +88,8 @@ def main():
     end_comics_number = 2700
 
     try:
-        random_comics = get_comics(random.randint(start_comics_number, end_comics_number))
-        comics_funny_comment = random_comics['alt']
-        fetch_comics(random_comics['img'], comics_filename)
+        comics_img, comics_funny_comment,  = get_comics(random.randint(start_comics_number, end_comics_number))
+        fetch_comics(comics_img, comics_filename)
 
         server_for_upload_photo = get_wall_upload_server(vk_token, vk_group_id)['response']['upload_url']
         server, photo, photo_hash = upload_image_to_vk('image.jpg', server_for_upload_photo)
