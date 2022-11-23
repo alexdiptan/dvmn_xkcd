@@ -24,10 +24,11 @@ def get_comics(comics_id):
 
 
 def get_wall_upload_server(vk_token, group_id):
-    url_params = {'group_id': group_id,
-                  'access_token': vk_token,
-                  'v': '5.131',
-                  }
+    url_params = {
+        'group_id': group_id,
+        'access_token': vk_token,
+        'v': '5.131',
+    }
     upload_url = 'https://api.vk.com/method/photos.getWallUploadServer'
     response = requests.get(upload_url, params=url_params)
     response.raise_for_status()
@@ -48,13 +49,14 @@ def upload_image_to_vk(image, upload_url):
 
 def save_wall_photo(group_id, photo, server, photo_hash, vk_token):
     url = 'https://api.vk.com/method/photos.saveWallPhoto'
-    params = {'group_id': group_id,
-              'photo': photo,
-              'server': server,
-              'hash': photo_hash,
-              'access_token': vk_token,
-              'v': '5.131',
-              }
+    params = {
+        'group_id': group_id,
+        'photo': photo,
+        'server': server,
+        'hash': photo_hash,
+        'access_token': vk_token,
+        'v': '5.131',
+    }
     response = requests.post(url, params=params)
     response.raise_for_status()
 
@@ -66,13 +68,14 @@ def save_wall_photo(group_id, photo, server, photo_hash, vk_token):
 def publish_photo_on_the_wall(media_id, owner_id, vk_group_id, message, vk_token):
     url = 'https://api.vk.com/method/wall.post'
     vk_attachments = f'photo{owner_id}_{media_id}'
-    params = {'owner_id': f'-{vk_group_id}',
-              'message': message,
-              'from_group': '1',
-              'attachments': vk_attachments,
-              'access_token': vk_token,
-              'v': '5.131',
-              }
+    params = {
+        'owner_id': f'-{vk_group_id}',
+        'message': message,
+        'from_group': '1',
+        'attachments': vk_attachments,
+        'access_token': vk_token,
+        'v': '5.131',
+    }
     response = requests.post(url, data=params)
     response.raise_for_status()
 
@@ -88,7 +91,7 @@ def main():
     end_comics_number = 2700
 
     try:
-        comics_img, comics_funny_comment,  = get_comics(random.randint(start_comics_number, end_comics_number))
+        comics_img, comics_funny_comment, = get_comics(random.randint(start_comics_number, end_comics_number))
         fetch_comics(comics_img, comics_filename)
 
         server_for_upload_photo = get_wall_upload_server(vk_token, vk_group_id)['response']['upload_url']
